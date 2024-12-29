@@ -1,8 +1,10 @@
 import 'package:edc_app/admin_dashboard_main_body/admin_dashboard.dart';
 import 'package:edc_app/providers/auth_provider.dart';
+import 'package:edc_app/providers/passwordresetProvider.dart';
 import 'package:edc_app/screens.dart/authentication_page.dart/sign_up_page.dart';
 import 'package:edc_app/screens.dart/bottom_Page_Navigation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
 class SignInPage extends StatefulWidget {
@@ -36,8 +38,9 @@ class _SignInPageState extends State<SignInPage> {
                 children: [
                   CircleAvatar(
                     radius: 70,
-                    backgroundImage: AssetImage(
-                        'assets/logo.png'), // Ensure this is in pubspec.yaml
+                    // backgroundImage: AssetImage(
+                    //   //  'assets/logo.png'
+                    //     ), // Ensure this is in pubspec.yaml
                   ),
                   SizedBox(height: 10),
                   Text(
@@ -127,7 +130,7 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // Forgot password action
+                      _showForgotPasswordDialog(context);
                     },
                     child: const Text(
                       'Forgot Password?',
@@ -174,18 +177,22 @@ class _SignInPageState extends State<SignInPage> {
                               MaterialPageRoute(
                                   builder: (context) => const AdminDashboard()),
                             );
-                          } else if (role == 'user') {
+                          } else
+                          //  if (role == 'user')
+                          {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
                                       const BottomPageNavigation()),
                             );
-                          } else {
-                            setState(() {
-                              errorMessage = "Unknown user role.";
-                            });
                           }
+                          debugPrint(role);
+                          //  else {
+                          //   setState(() {
+                          //     errorMessage = "Unknown user role.";
+                          //   });
+                          // }
                         } catch (e) {
                           setState(() {
                             errorMessage = "Login failed. Please try again.";
@@ -256,4 +263,104 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
+}
+
+void _showForgotPasswordDialog(BuildContext context) {
+  final TextEditingController emailController = TextEditingController();
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Forgot Password'),
+        content: TextField(
+          controller: emailController,
+          decoration: const InputDecoration(labelText: 'Enter your email'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context), // Close the dialog
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final passwordResetProvider =
+                  Provider.of<PasswordResetProvider>(context, listen: false);
+
+              await passwordResetProvider.forgotPassword(emailController.text);
+
+              if (passwordResetProvider.errorMessage.isNotEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(passwordResetProvider.errorMessage)),
+                );
+              }
+
+              if (passwordResetProvider.errorMessage
+                  .contains('Password reset link has been sent')) {
+                Navigator.pop(context); // Close the forgot dialog
+                _showResetPasswordDialog(context); // Open the reset dialog
+              }
+            },
+            child: const Text('Send Reset Link'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _showResetPasswordDialog(BuildContext context) {
+  final TextEditingController tokenController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Reset Password'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: tokenController,
+              decoration: const InputDecoration(labelText: 'Reset Token'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: newPasswordController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'New Password'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context), // Close the dialog
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final passwordResetProvider =
+                  Provider.of<PasswordResetProvider>(context, listen: false);
+
+              await passwordResetProvider.resetPassword(
+                tokenController.text,
+                newPasswordController.text,
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(passwordResetProvider.errorMessage)),
+              );
+
+              if (passwordResetProvider.errorMessage
+                  .contains('Password reset successful')) {
+                Navigator.pop(context); // Close the reset dialog
+              }
+            },
+            child: const Text('Reset Password'),
+          ),
+        ],
+      );
+    },
+  );
 }

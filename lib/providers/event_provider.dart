@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +11,7 @@ class EventProvider extends ChangeNotifier {
   }
 
   Future<void> createEvent(
-      String eventName, String location, String imageUrl) async {
+      String eventName, String location, File? imageFile) async {
     debugPrint(">>>>>>>>>>>>>>>>>>>>> Testing create event");
 
     try {
@@ -21,35 +22,85 @@ class EventProvider extends ChangeNotifier {
         throw Exception('Authentication token not found. Please login again.');
       }
 
-      // Create the body with only the required values
-      final eventData = {
-        "eventname": eventName,
-        "location": location,
-        "image": imageUrl
-      };
+      // Prepare URI
+      final uri = Uri.parse(
+          'http://192.168.43.189:4000/api/v1/user/admindashboard'); // Replace with your backend URL
 
-      // Send the request with the token in the header and the body as JSON
-      final response = await http.post(
-        Uri.parse(
-            'http://localhost:4000/api/v1/user/admindashboard'), // Replace with your backend URL
-        headers: {
-          'Authorization': 'Bearer $token', // Use the retrieved token
-          'Content-Type':
-              'application/json', // Indicate we're sending JSON data
-        },
-        body: json.encode(eventData), // Convert the body to JSON
-      );
+      // Create multipart request
+      var request = http.MultipartRequest('POST', uri)
+        ..headers['Authorization'] = 'Bearer $token'
+        ..fields['eventname'] = eventName
+        ..fields['location'] = location;
 
+      // If image is provided, add it to the request
+      if (imageFile != null) {
+        // Add the image file to the request
+        var imageFileBytes = await imageFile.readAsBytes();
+        var multipartFile = http.MultipartFile.fromBytes(
+          'image', // The field name on the server (e.g., 'image' for file upload)
+          imageFileBytes,
+          filename: imageFile.uri.pathSegments.last, // File name from the image
+        );
+        request.files.add(multipartFile);
+      }
+
+      // Send the request
+      final response = await request.send();
+
+      // Check response status
       if (response.statusCode == 201) {
         debugPrint('Event created successfully!');
       } else {
-        throw Exception('Failed to create event: ${response.body}');
+        final responseBody = await response.stream.bytesToString();
+        throw Exception('Failed to create event: $responseBody');
       }
     } catch (e) {
       debugPrint('Error creating event: $e');
       throw Exception('Error creating event: $e');
     }
   }
+
+  // Future<void> createEvent(
+  //     String eventName, String location, String imageUrl) async {
+  //   debugPrint(">>>>>>>>>>>>>>>>>>>>> Testing create event");
+
+  //   try {
+  //     // Retrieve token from SharedPreferences
+  //     final token = await _getToken();
+
+  //     if (token == null) {
+  //       throw Exception('Authentication token not found. Please login again.');
+  //     }
+
+  //     // Create the body with only the required values
+  //     final eventData = {
+  //       "eventname": eventName,
+  //       "location": location,
+  //       "image": imageUrl
+  //     };
+
+  //     // Send the request with the token in the header and the body as JSON
+  //     final response = await http.post(
+  //       Uri.parse(
+  //           'http://192.168.43.189:4000/api/v1/user/admindashboard'), // Replace with your backend URL
+  //       headers: {
+  //         'Authorization': 'Bearer $token', // Use the retrieved token
+  //         'Content-Type':
+  //             'application/json', // Indicate we're sending JSON data
+  //       },
+  //       body: json.encode(eventData), // Convert the body to JSON
+  //     );
+
+  //     if (response.statusCode == 201) {
+  //       debugPrint('Event created successfully!');
+  //     } else {
+  //       throw Exception('Failed to create event: ${response.body}');
+  //     }
+  //   } catch (e) {
+  //     debugPrint('Error creating event: $e');
+  //     throw Exception('Error creating event: $e');
+  //   }
+  // }
 
   // Fetch all events
   Future<List<Map<String, dynamic>>> getAllEvents() async {
@@ -64,7 +115,7 @@ class EventProvider extends ChangeNotifier {
       // Make the GET request
       final response = await http.get(
         Uri.parse(
-            'http://localhost:4000/api/v1/user/admindashboard'), // Replace with your backend URL
+            'http://192.168.43.189:4000/api/v1/user/admindashboard'), // Replace with your backend URL
         headers: {
           'Authorization': 'Bearer $token', // Include the token in the header
           'Content-Type': 'application/json', // Ensure JSON response
@@ -107,7 +158,7 @@ class EventProvider extends ChangeNotifier {
 
       final response = await http.patch(
         Uri.parse(
-            'http://localhost:4000/api/v1/user/admindashboard/$eventId'), // Replace with your backend URL
+            'http://192.168.43.189:4000/api/v1/user/admindashboard/$eventId'), // Replace with your backend URL
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -137,7 +188,7 @@ class EventProvider extends ChangeNotifier {
 
       final response = await http.delete(
         Uri.parse(
-            'http://localhost:4000/api/v1/user/admindashboard/$eventId'), // Replace with your backend URL
+            'http://192.168.43.189:4000/api/v1/user/admindashboard/$eventId'), // Replace with your backend URL
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

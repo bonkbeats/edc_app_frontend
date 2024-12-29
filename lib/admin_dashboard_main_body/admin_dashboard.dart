@@ -1,7 +1,10 @@
 import 'package:edc_app/admin_dashboard_main_body/admin_events_page.dart';
 import 'package:edc_app/admin_dashboard_main_body/user_queries.dart';
+import 'package:edc_app/screens.dart/authentication_page.dart/sign_in_page.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:edc_app/providers/auth_provider.dart'; // Make sure the auth provider is imported
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -25,6 +28,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
       _selectedIndex = index;
     });
     Navigator.pop(context); // Close the drawer after selection
+  }
+
+  void _signOut() async {
+    // Call logout from AuthProvider
+    Provider.of<AuthProvider>(context, listen: false).logout();
+
+    // Navigate to the sign-in page after logging out
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const SignInPage()),
+    );
   }
 
   @override
@@ -69,6 +83,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
               leading: const Icon(Icons.question_answer),
               title: const Text('User Queries'),
               onTap: () => _onDrawerItemTapped(2),
+            ),
+            const Divider(), // Optional divider between the last item and Sign Out
+            ListTile(
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text('Sign Out'),
+              onTap: _signOut, // Call the sign out function
             ),
           ],
         ),

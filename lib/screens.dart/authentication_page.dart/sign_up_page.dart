@@ -138,7 +138,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   padding: const EdgeInsets.only(bottom: 20),
                   child: Text(
                     errorMessage!,
-                    style: TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.red),
                   ),
                 ),
 

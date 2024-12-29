@@ -8,8 +8,10 @@ class PublicEventProvider extends ChangeNotifier {
   List<Map<String, dynamic>> get events => _events;
 
   Future<void> fetchAllEvents() async {
+    // 192.168.43.189
+    //http://localhost:4000/api/v1/publicevent
     const url =
-        'http://localhost:4000/api/v1/publicevent'; // Replace with your backend URL
+        'http://192.168.43.189:4000/api/v1/publicevent'; // Replace with your backend URL
 
     try {
       final response = await http.get(Uri.parse(url));

@@ -1,4 +1,7 @@
+import 'package:edc_app/providers/auth_provider.dart';
+import 'package:edc_app/screens.dart/authentication_page.dart/sign_in_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -70,8 +73,14 @@ class _ProfilePageState extends State<ProfilePage> {
               ListTile(
                 leading: const Icon(Icons.exit_to_app),
                 title: const Text('Sign Out'),
-                onTap: () {
-                  // Perform Sign Out action
+                onTap: () async {
+                  // Call the logout method from AuthProvider
+                  Provider.of<AuthProvider>(context, listen: false).logout();
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SignInPage()),
+                  );
                 },
               ),
             ],
