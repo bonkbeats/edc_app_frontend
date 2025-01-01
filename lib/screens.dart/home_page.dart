@@ -1,4 +1,5 @@
 import 'package:edc_app/providers/public_event_provider.dart';
+import 'package:edc_app/screens.dart/event_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -123,8 +124,14 @@ class _upcommingeventState extends State<upcommingevent> {
                   runSpacing: 0.0,
                   children: events.map((event) {
                     return EventCard(
+                      eventDay: event['eventDay'] ??
+                          'Unknown Day', // Mapping for eventDay
+                      organiser: event['organiser'] ??
+                          'Unknown Organiser', // Mapping for organiser
+                      description: event['description'] ??
+                          'No Description Available', // Mapping for description
                       eventName: event['eventname'] ?? 'Unknown Event',
-                      // date: event['date'] ?? 'Unknown Date',
+                      eventDate: event['eventDate'] ?? 'Unknown Date',
                       // time: event['time'] ?? 'Unknown Time',
                       location: event['location'] ?? 'Unknown Location',
                       imageUrl: 'http://192.168.43.189:4000${event['image']}',
@@ -139,18 +146,22 @@ class _upcommingeventState extends State<upcommingevent> {
 
 class EventCard extends StatelessWidget {
   final String eventName;
-  // final String date;
-  // final String time;
+  final String eventDate;
+  final String eventDay;
   final String location;
   final String imageUrl;
+  final String description;
+  final String organiser;
 
   const EventCard({
     super.key,
     required this.eventName,
-    // required this.date,
-    // required this.time,
+    required this.eventDate,
+    required this.eventDay,
     required this.location,
     required this.imageUrl,
+    required this.description,
+    required this.organiser,
   });
 
   @override
@@ -162,8 +173,10 @@ class EventCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => EventDetailPage(
               eventName: eventName,
-              // date: date,
-              // time: time,
+              eventDate: eventDate,
+              organiser: organiser,
+              eventDay: eventDay,
+              description: description,
               location: location,
               imageUrl: imageUrl,
             ),
@@ -236,62 +249,6 @@ class EventCard extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class EventDetailPage extends StatelessWidget {
-  final String eventName;
-  // final String date;
-  // final String time;
-  final String location;
-  final String imageUrl;
-
-  const EventDetailPage({
-    super.key,
-    required this.eventName,
-    // required this.date,
-    // required this.time,
-    required this.location,
-    required this.imageUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(eventName),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(imageUrl, height: 200.0, fit: BoxFit.cover),
-            const SizedBox(height: 16.0),
-            Text(
-              eventName,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16.0),
-            // Text('Date: $date', style: const TextStyle(fontSize: 16)),
-            // const SizedBox(height: 8.0),
-            // Text('Time: $time', style: const TextStyle(fontSize: 16)),
-            // const SizedBox(height: 8.0),
-            Text('Location: $location', style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 16.0),
-            const Text(
-              'Event Description:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8.0),
-            const Text(
-              'This is a detailed description of the event. You can provide more information about the event, its agenda, speakers, and any other details here.',
-              style: TextStyle(fontSize: 14),
-            ),
-          ],
         ),
       ),
     );

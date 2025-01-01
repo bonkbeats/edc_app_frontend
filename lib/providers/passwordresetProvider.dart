@@ -18,7 +18,7 @@ class PasswordResetProvider extends ChangeNotifier {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://192.168.43.189:4000/api/v1/auth/forgotpassword'), // Your backend URL
+            'http://192.168.43.189:4000/api/v1/auth/forgotpassword'), // Your backend URL
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'email': email}),
       );
@@ -46,7 +46,7 @@ class PasswordResetProvider extends ChangeNotifier {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://192.168.43.189:4000/api/v1/auth/resetpassword/$token'), // Your backend URL
+            'http://192.168.43.189:4000/api/v1/auth/resetpassword/$token'), // Your backend URL
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'password': newPassword}),
       );

@@ -1,4 +1,5 @@
 import 'package:edc_app/admin_dashboard_main_body/admin_events_page.dart';
+import 'package:edc_app/admin_dashboard_main_body/event_list.dart';
 import 'package:edc_app/admin_dashboard_main_body/user_queries.dart';
 import 'package:edc_app/screens.dart/authentication_page.dart/sign_in_page.dart';
 
@@ -18,9 +19,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   // List of pages to display
   final List<Widget> _pages = [
-    const Center(child: Text('Welcome to Admin Dashboard!')),
+    const EventList(),
     const AdminEventPage(),
     const UserQueries(),
+    const EventList()
   ];
 
   void _onDrawerItemTapped(int index) {
@@ -79,6 +81,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               title: const Text('Events'),
               onTap: () => _onDrawerItemTapped(1),
             ),
+
             ListTile(
               leading: const Icon(Icons.question_answer),
               title: const Text('User Queries'),

@@ -11,7 +11,14 @@ class EventProvider extends ChangeNotifier {
   }
 
   Future<void> createEvent(
-      String eventName, String location, File? imageFile) async {
+    String eventName,
+    String location,
+    File? imageFile,
+    String organiser,
+    String eventDay,
+    String eventDate,
+    String description,
+  ) async {
     debugPrint(">>>>>>>>>>>>>>>>>>>>> Testing create event");
 
     try {
@@ -30,7 +37,11 @@ class EventProvider extends ChangeNotifier {
       var request = http.MultipartRequest('POST', uri)
         ..headers['Authorization'] = 'Bearer $token'
         ..fields['eventname'] = eventName
-        ..fields['location'] = location;
+        ..fields['location'] = location
+        ..fields['eventDay'] = eventDay
+        ..fields['eventDate'] = eventDate
+        ..fields['description'] = description
+        ..fields['organiser'] = organiser;
 
       // If image is provided, add it to the request
       if (imageFile != null) {
@@ -50,6 +61,7 @@ class EventProvider extends ChangeNotifier {
       // Check response status
       if (response.statusCode == 201) {
         debugPrint('Event created successfully!');
+        await _fetchEvents();
       } else {
         final responseBody = await response.stream.bytesToString();
         throw Exception('Failed to create event: $responseBody');
@@ -138,38 +150,67 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  // Update an existing event
-  Future<void> updateEvent(String eventId, String eventName, String location,
-      String imageUrl) async {
+  Future<void> updateEvent(
+    String eventId,
+    String eventName,
+    String location,
+    File? imageFile,
+    String organiser,
+    String eventDay,
+    String eventDate,
+    String description,
+  ) async {
     debugPrint(
-        ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Testing create event");
+        ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Testing update event");
+
     try {
+      // Retrieve token from SharedPreferences
       final token = await _getToken();
 
       if (token == null) {
         throw Exception('Authentication token not found. Please login again.');
       }
 
-      final eventData = {
-        "eventname": eventName,
-        "location": location,
-        "image": imageUrl,
-      };
+      // Prepare URI
+      final uri = Uri.parse(
+          'http://192.168.43.189:4000/api/v1/user/admindashboard/$eventId'); // Replace with your backend URL
 
-      final response = await http.patch(
-        Uri.parse(
-            'http://192.168.43.189:4000/api/v1/user/admindashboard/$eventId'), // Replace with your backend URL
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-        body: json.encode(eventData),
-      );
+      // Create multipart request
+      var request = http.MultipartRequest('PATCH', uri)
+        ..headers['Authorization'] = 'Bearer $token'
+        ..fields['eventname'] = eventName
+        ..fields['location'] = location
+        ..fields['eventDay'] = eventDay
+        ..fields['eventDate'] = eventDate
+        ..fields['description'] = description
+        ..fields['organiser'] = organiser;
 
+      // debugPrint("organiser: $organiser");
+      // debugPrint("location: $location");
+      // debugPrint("eventDay: $eventDay");
+
+      // If image is provided, add it to the request
+      if (imageFile != null) {
+        // Add the image file to the request
+        var imageFileBytes = await imageFile.readAsBytes();
+        var multipartFile = http.MultipartFile.fromBytes(
+          'image', // The field name on the server (e.g., 'image' for file upload)
+          imageFileBytes,
+          filename: imageFile.uri.pathSegments.last, // File name from the image
+        );
+        request.files.add(multipartFile);
+      }
+
+      // Send the request
+      final response = await request.send();
+
+      // Check response status
       if (response.statusCode == 200) {
         debugPrint('Event updated successfully!');
+        await _fetchEvents();
       } else {
-        throw Exception('Failed to update event: ${response.body}');
+        final responseBody = await response.stream.bytesToString();
+        throw Exception('Failed to update event: $responseBody');
       }
     } catch (e) {
       debugPrint('Error updating event: $e');
@@ -197,12 +238,24 @@ class EventProvider extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         debugPrint('Event deleted successfully!');
+        await _fetchEvents();
       } else {
         throw Exception('Failed to delete event: ${response.body}');
       }
     } catch (e) {
       debugPrint('Error deleting event: $e');
       throw Exception('Error deleting event: $e');
+    }
+  }
+
+  Future<void> _fetchEvents() async {
+    try {
+      List<Map<String, dynamic>> events = await getAllEvents();
+      // Notify listeners to update the UI with the new event data
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error refreshing events: $e');
+      throw Exception('Error refreshing events: $e');
     }
   }
 }
