@@ -25,6 +25,18 @@ class searchandfilter extends StatefulWidget {
 }
 
 class _searchandfilterState extends State<searchandfilter> {
+  final TextEditingController _searchController = TextEditingController();
+
+  void _onSearch(String query) async {
+    if (query.isEmpty) {
+      await Provider.of<PublicEventProvider>(context, listen: false)
+          .fetchAllEvents(); // Fetch all events when search is cleared
+    } else {
+      await Provider.of<PublicEventProvider>(context, listen: false)
+          .searchEvents(query);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -34,17 +46,35 @@ class _searchandfilterState extends State<searchandfilter> {
           child: Container(color: Colors.white),
         ),
         Positioned(
-          top: 0, // Position the pink container at the bottom
+            top: 0, // Position the pink container at the bottom
+            left: 0,
+            right: 0,
+            child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(60.0),
+                  bottomRight: Radius.circular(60.0),
+                ),
+                child: Container(color: Colors.pink, height: 200))),
+        Positioned(
+          top: 60,
           left: 0,
           right: 0,
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(60.0),
-              bottomRight: Radius.circular(60.0),
-            ),
-            child: Container(
-              color: Colors.pink,
-              height: 200.0, // Adjust height as needed
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 50.0, 16.0, 0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search events...',
+                prefixIcon: const Icon(Icons.search),
+                filled: true,
+                fillColor:
+                    Colors.transparent, // Set the background to transparent
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onChanged: _onSearch,
             ),
           ),
         ),
@@ -103,6 +133,7 @@ class _upcommingeventState extends State<upcommingevent> {
   Widget build(BuildContext context) {
     final eventProvider = Provider.of<PublicEventProvider>(context);
     final events = eventProvider.events;
+    final noResultsFound = eventProvider.noResultsFound;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -117,27 +148,30 @@ class _upcommingeventState extends State<upcommingevent> {
             ),
           ),
           const SizedBox(height: 16),
-          events.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : Wrap(
-                  spacing: 0.0,
-                  runSpacing: 0.0,
-                  children: events.map((event) {
-                    return EventCard(
-                      eventDay: event['eventDay'] ??
-                          'Unknown Day', // Mapping for eventDay
-                      organiser: event['organiser'] ??
-                          'Unknown Organiser', // Mapping for organiser
-                      description: event['description'] ??
-                          'No Description Available', // Mapping for description
-                      eventName: event['eventname'] ?? 'Unknown Event',
-                      eventDate: event['eventDate'] ?? 'Unknown Date',
-                      // time: event['time'] ?? 'Unknown Time',
-                      location: event['location'] ?? 'Unknown Location',
-                      imageUrl: 'http://192.168.43.189:4000${event['image']}',
-                    );
-                  }).toList(),
-                ),
+          noResultsFound
+              ? const Center(child: Text("No results found"))
+              : events.isEmpty
+                  ? const Center(child: CircularProgressIndicator())
+                  : Wrap(
+                      spacing: 0.0,
+                      runSpacing: 0.0,
+                      children: events.map((event) {
+                        return EventCard(
+                          eventDay: event['eventDay'] ??
+                              'Unknown Day', // Mapping for eventDay
+                          organiser: event['organiser'] ??
+                              'Unknown Organiser', // Mapping for organiser
+                          description: event['description'] ??
+                              'No Description Available', // Mapping for description
+                          eventName: event['eventname'] ?? 'Unknown Event',
+                          eventDate: event['eventDate'] ?? 'Unknown Date',
+                          // time: event['time'] ?? 'Unknown Time',
+                          location: event['location'] ?? 'Unknown Location',
+                          imageUrl:
+                              'https://edc-app-vt8t.onrender.com${event['image']}',
+                        );
+                      }).toList(),
+                    ),
         ],
       ),
     );

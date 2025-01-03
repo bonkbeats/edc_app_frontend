@@ -221,7 +221,7 @@ class _EventListState extends State<EventList> {
                         leading: event['image'] != null &&
                                 event['image'].isNotEmpty
                             ? Image.network(
-                                'http://192.168.43.189:4000${event['image']}',
+                                'https://edc-app-vt8t.onrender.com${event['image']}',
                                 width: 50,
                                 height: 50,
                                 fit: BoxFit.cover,

@@ -49,7 +49,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<String> login(String email, String password) async {
-    final url = Uri.parse('http://192.168.43.189:4000/api/v1/auth/login');
+    final url =
+        Uri.parse('https://edc-app-vt8t.onrender.com/api/v1/auth/login');
     final response = await http.post(url,
         headers: {'content-type': 'application/json'},
         body: jsonEncode({'email': email, 'password': password}));
@@ -72,7 +73,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> register(String name, String email, String password) async {
-    final url = Uri.parse('http://192.168.43.189:4000/api/v1/auth/register');
+    final url =
+        Uri.parse('https://edc-app-vt8t.onrender.com/api/v1/auth/register');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
