@@ -44,11 +44,13 @@ class _EventListState extends State<EventList> {
     try {
       await Provider.of<EventProvider>(context, listen: false)
           .deleteEvent(eventId);
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Event deleted successfully!')),
       );
       setState(() {});
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
@@ -193,10 +195,7 @@ class _EventListState extends State<EventList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Event List'),
-        centerTitle: true,
-      ),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -221,7 +220,7 @@ class _EventListState extends State<EventList> {
                         leading: event['image'] != null &&
                                 event['image'].isNotEmpty
                             ? Image.network(
-                                'https://edc-app-vt8t.onrender.com${event['image']}',
+                                '${event['image']}',
                                 width: 50,
                                 height: 50,
                                 fit: BoxFit.cover,

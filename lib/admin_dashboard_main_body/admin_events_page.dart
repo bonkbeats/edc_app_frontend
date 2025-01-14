@@ -46,9 +46,9 @@ class _AdminEventPageState extends State<AdminEventPage> {
   }
 
   Future<void> _pickImage({bool isEdit = false}) async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
+        await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
@@ -79,6 +79,7 @@ class _AdminEventPageState extends State<AdminEventPage> {
             eventDay,
             eventDate,
             description);
+        if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Event created successfully!')),
@@ -98,6 +99,7 @@ class _AdminEventPageState extends State<AdminEventPage> {
         // Refresh the displayed events
         setState(() {});
       } catch (e) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e')),
         );
@@ -326,6 +328,7 @@ class _AdminEventPageState extends State<AdminEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

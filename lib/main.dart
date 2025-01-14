@@ -1,9 +1,12 @@
 import 'package:edc_app/admin_dashboard_main_body/admin_dashboard.dart';
 import 'package:edc_app/providers/auth_provider.dart';
+import 'package:edc_app/providers/edc_team.dart';
 import 'package:edc_app/providers/event_provider.dart'; // Import EventProvider
 import 'package:edc_app/providers/passwordresetProvider.dart';
 import 'package:edc_app/providers/public_event_provider.dart';
+import 'package:edc_app/providers/public_profile.dart';
 import 'package:edc_app/screens.dart/authentication_page.dart/sign_in_page.dart';
+// import 'package:edc_app/screens.dart/authentication_page.dart/splash_screen.dart';
 import 'package:edc_app/screens.dart/bottom_page_navigation.dart';
 
 import 'package:flutter/material.dart';
@@ -17,6 +20,8 @@ void main() {
         ChangeNotifierProvider(create: (context) => EventProvider()),
         ChangeNotifierProvider(create: (context) => PublicEventProvider()),
         ChangeNotifierProvider(create: (context) => PasswordResetProvider()),
+        ChangeNotifierProvider(create: (context) => EdcTeamProvider()),
+        ChangeNotifierProvider(create: (context) => PublicProfileProvider()),
       ],
       child: const MyApp(),
     ),
@@ -31,9 +36,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Colors.blue,
-          selectedItemColor: Color.fromARGB(255, 43, 14, 231),
+          // backgroundColor: Colors.blue,
+          selectedItemColor: Colors.pink,
           unselectedItemColor: Colors.grey,
         ),
         useMaterial3: true,
@@ -43,7 +49,7 @@ class MyApp extends StatelessWidget {
         builder: (context, authProvider, _) {
           // If data is still loading, show a loading screen
           if (authProvider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            // return const SplashScreen();
           }
 
           // Check if the user is logged in

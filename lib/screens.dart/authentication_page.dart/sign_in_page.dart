@@ -25,6 +25,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -36,20 +37,20 @@ class _SignInPageState extends State<SignInPage> {
               // Logo and Title
               const Column(
                 children: [
-                  CircleAvatar(
-                    radius: 70,
-                    // backgroundImage: AssetImage(
-                    //   //  'assets/logo.png'
-                    //     ), // Ensure this is in pubspec.yaml
+                  Image(
+                    image: AssetImage(
+                        'assets/images/edc_logo.png'), // Reference the image
+                    width: 160, // Set desired width
+                    height: 160, // Set desired height
                   ),
                   SizedBox(height: 10),
-                  Text(
-                    'EDC',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  // Text(
+                  //   'EDC',
+                  //   style: TextStyle(
+                  //     fontSize: 30,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(height: 30),
@@ -80,6 +81,10 @@ class _SignInPageState extends State<SignInPage> {
                       prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(
+                          color: Color.fromARGB(
+                              255, 238, 235, 235), // Light grey color
+                        ),
                       ),
                     ),
                   ),
@@ -208,7 +213,10 @@ class _SignInPageState extends State<SignInPage> {
                     ? const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       )
-                    : const Text('SIGN IN'),
+                    : const Text(
+                        'SIGN IN',
+                        style: TextStyle(color: Colors.white),
+                      ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF3D56F0),
                   padding:

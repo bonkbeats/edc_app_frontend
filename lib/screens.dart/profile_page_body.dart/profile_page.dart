@@ -1,5 +1,7 @@
 import 'package:edc_app/providers/auth_provider.dart';
 import 'package:edc_app/screens.dart/authentication_page.dart/sign_in_page.dart';
+
+import 'package:edc_app/screens.dart/profile_page_body.dart/myprofile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,80 +15,104 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // User Profile Section
-        Container(
-          padding: const EdgeInsets.fromLTRB(0, 40, 230, 0),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 60.0,
-                backgroundImage: AssetImage(
-                    'path/to/profile_image.jpg'), // Replace with your actual image path
-              ),
-              SizedBox(height: 10.0),
-              Text(
-                'Ujjawal Aman',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        const Divider(
-          color: Colors.grey, // Color of the line
-          thickness: 2, // Thickness of the line
-        ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 254, 254, 255),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Profile Section
 
-        // Options Section
-        Expanded(
-          child: ListView(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text('My Profile'),
-                onTap: () {
-                  // Navigate to My Profile screen
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.email),
-                title: const Text('Contact Us'),
-                onTap: () {
-                  // Navigate to Contact Us screen
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.help),
-                title: const Text('Help & FAQs'),
-                onTap: () {
-                  // Navigate to Help & FAQs screen
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.exit_to_app),
-                title: const Text('Sign Out'),
-                onTap: () async {
-                  // Call the logout method from AuthProvider
-                  Provider.of<AuthProvider>(context, listen: false).logout();
+            Image.asset(
+              'assets/images/edc_logo.png',
+              height: 160,
+              width: 160,
+            ),
+            const SizedBox(height: 20),
 
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SignInPage()),
-                  );
-                },
+            // Divider
+            const Divider(
+              color: Colors.grey,
+              thickness: 2,
+            ),
+            const SizedBox(height: 20),
+
+            // Options Section
+            Expanded(
+              child: ListView(
+                children: [
+                  ListTile(
+                    leading: const Icon(
+                      Icons.person,
+                    ),
+                    title: const Text(
+                      'My Profile',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Myprofile()),
+                      );
+
+                      // Navigate to My Profile screen
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.email,
+                    ),
+                    title: const Text(
+                      'Contact Us',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    onTap: () {
+                      // Navigate to Contact Us screen
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.help,
+                    ),
+                    title: const Text(
+                      'Help & FAQs',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    onTap: () {
+                      // Navigate to Help & FAQs screen
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.exit_to_app,
+                    ),
+                    title: const Text(
+                      'Sign Out',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    onTap: () async {
+                      // Call the logout method from AuthProvider
+                      Provider.of<AuthProvider>(context, listen: false)
+                          .logout();
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignInPage()),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

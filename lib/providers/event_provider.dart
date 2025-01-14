@@ -31,7 +31,7 @@ class EventProvider extends ChangeNotifier {
 
       // Prepare URI
       final uri = Uri.parse(
-          'https://edc-app-vt8t.onrender.com/api/v1/user/admindashboard'); // Replace with your backend URL
+          'http://192.168.43.189:4000/api/v1/user/admindashboard'); // Replace with your backend URL
 
       // Create multipart request
       var request = http.MultipartRequest('POST', uri)
@@ -127,7 +127,7 @@ class EventProvider extends ChangeNotifier {
       // Make the GET request
       final response = await http.get(
         Uri.parse(
-            'https://edc-app-vt8t.onrender.com/api/v1/user/admindashboard'), // Replace with your backend URL
+            'http://192.168.43.189:4000/api/v1/user/admindashboard'), // Replace with your backend URL
         headers: {
           'Authorization': 'Bearer $token', // Include the token in the header
           'Content-Type': 'application/json', // Ensure JSON response
@@ -173,7 +173,7 @@ class EventProvider extends ChangeNotifier {
 
       // Prepare URI
       final uri = Uri.parse(
-          'https://edc-app-vt8t.onrender.com/api/v1/user/admindashboard/$eventId'); // Replace with your backend URL
+          'http://192.168.43.189:4000/api/v1/user/admindashboard/$eventId'); // Replace with your backend URL
 
       // Create multipart request
       var request = http.MultipartRequest('PATCH', uri)
@@ -229,7 +229,7 @@ class EventProvider extends ChangeNotifier {
 
       final response = await http.delete(
         Uri.parse(
-            'https://edc-app-vt8t.onrender.com/api/v1/user/admindashboard/$eventId'), // Replace with your backend URL
+            'http://192.168.43.189:4000/api/v1/user/admindashboard/$eventId'), // Replace with your backend URL
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -250,7 +250,7 @@ class EventProvider extends ChangeNotifier {
 
   Future<void> _fetchEvents() async {
     try {
-      List<Map<String, dynamic>> events = await getAllEvents();
+      //List<Map<String, dynamic>> events = await getAllEvents();
       // Notify listeners to update the UI with the new event data
       notifyListeners();
     } catch (e) {

@@ -28,10 +28,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Event Details'),
-        backgroundColor: Colors.deepPurple,
-      ),
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           // Scrollable content
@@ -46,44 +43,61 @@ class _EventDetailPageState extends State<EventDetailPage> {
                       height: 250.0,
                       width: double.infinity,
                       fit: BoxFit.cover,
+                      errorBuilder: (BuildContext context, Object error,
+                          StackTrace? stackTrace) {
+                        return const Center(
+                          child: Icon(
+                            Icons.image_not_supported,
+                            size: 50.0,
+                            color: Colors.grey,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         widget.eventName,
                         style: const TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.w400,
+                          fontSize: 36,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
+                      const SizedBox(height: 8.0),
                       const Text(
-                        "summit 2024",
+                        "Summit 2024",
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 28,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 16.0),
                       Row(
                         children: [
-                          const Icon(Icons.calendar_today,
-                              size: 40.0, color: Colors.deepPurple),
-                          const SizedBox(width: 13.0),
+                          Icon(Icons.calendar_today,
+                              size: 30.0, color: Colors.grey[700]),
+                          const SizedBox(width: 10.0),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 '${widget.eventDate} ',
-                                style: const TextStyle(fontSize: 16),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey[700],
+                                ),
                               ),
                               Text(
                                 '${widget.eventDay} ',
-                                style: const TextStyle(fontSize: 16),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey[700],
+                                ),
                               ),
                             ],
                           ),
@@ -92,12 +106,15 @@ class _EventDetailPageState extends State<EventDetailPage> {
                       const SizedBox(height: 16.0),
                       Row(
                         children: [
-                          const Icon(Icons.location_on,
-                              size: 40.0, color: Colors.deepPurple),
-                          const SizedBox(width: 13.0),
+                          Icon(Icons.location_on,
+                              size: 30.0, color: Colors.grey[700]),
+                          const SizedBox(width: 10.0),
                           Text(
                             widget.location,
-                            style: const TextStyle(fontSize: 16),
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey[700],
+                            ),
                           ),
                         ],
                       ),
@@ -106,40 +123,40 @@ class _EventDetailPageState extends State<EventDetailPage> {
                         children: [
                           const CircleAvatar(
                             radius: 23,
+                            backgroundColor: Colors.grey,
                           ),
-                          const SizedBox(width: 13.0),
-                          Row(
+                          const SizedBox(width: 10.0),
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Organiser",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    widget.organiser,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
+                              const Text(
+                                "Organiser",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              const SizedBox(width: 120.0),
-                              TextButton(
-                                onPressed: () {},
-                                child: const Text(
-                                  'Contact',
-                                  style: TextStyle(color: Colors.deepPurple),
+                              Text(
+                                widget.organiser,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
+                          ),
+                          const Spacer(),
+                          TextButton(
+                            onPressed: () {
+                              // Add logic to contact organiser
+                            },
+                            child: const Text(
+                              'Contact',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -147,14 +164,14 @@ class _EventDetailPageState extends State<EventDetailPage> {
                       const Text(
                         'About Event',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 8.0),
                       Text(
                         widget.description,
-                        style: const TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 16, color: Colors.grey[700]),
                       ),
                       const SizedBox(height: 24.0),
                     ],

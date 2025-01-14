@@ -1,6 +1,7 @@
 import 'package:edc_app/admin_dashboard_main_body/admin_events_page.dart';
+
 import 'package:edc_app/admin_dashboard_main_body/event_list.dart';
-import 'package:edc_app/admin_dashboard_main_body/user_queries.dart';
+import 'package:edc_app/admin_dashboard_main_body/edc_team_profile.dart/edc_team.dart';
 import 'package:edc_app/screens.dart/authentication_page.dart/sign_in_page.dart';
 
 import 'package:flutter/material.dart';
@@ -21,8 +22,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
   final List<Widget> _pages = [
     const EventList(),
     const AdminEventPage(),
-    const UserQueries(),
-    const EventList()
+    const Edcteam(),
+    // const ProfileCreationPage()
   ];
 
   void _onDrawerItemTapped(int index) {
@@ -46,6 +47,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Admin Dashboard'),
         backgroundColor: Colors.blueAccent,
@@ -84,9 +86,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
             ListTile(
               leading: const Icon(Icons.question_answer),
-              title: const Text('User Queries'),
+              title: const Text('EDC Team'),
               onTap: () => _onDrawerItemTapped(2),
             ),
+            // ListTile(
+            //   leading: const Icon(Icons.question_answer),
+            //   title: const Text('profile'),
+            //   onTap: () => _onDrawerItemTapped(3),
+            // ),
             const Divider(), // Optional divider between the last item and Sign Out
             ListTile(
               leading: const Icon(Icons.exit_to_app),

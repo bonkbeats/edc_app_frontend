@@ -167,8 +167,7 @@ class _upcommingeventState extends State<upcommingevent> {
                           eventDate: event['eventDate'] ?? 'Unknown Date',
                           // time: event['time'] ?? 'Unknown Time',
                           location: event['location'] ?? 'Unknown Location',
-                          imageUrl:
-                              'https://edc-app-vt8t.onrender.com${event['image']}',
+                          imageUrl: '${event['image']}',
                         );
                       }).toList(),
                     ),
