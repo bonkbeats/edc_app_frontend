@@ -6,6 +6,7 @@ import 'package:edc_app/providers/passwordresetProvider.dart';
 import 'package:edc_app/providers/public_event_provider.dart';
 import 'package:edc_app/providers/public_profile.dart';
 import 'package:edc_app/screens.dart/authentication_page.dart/sign_in_page.dart';
+import 'package:edc_app/screens.dart/authentication_page.dart/splash_screen.dart';
 // import 'package:edc_app/screens.dart/authentication_page.dart/splash_screen.dart';
 import 'package:edc_app/screens.dart/bottom_page_navigation.dart';
 
@@ -16,9 +17,9 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => PublicEventProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => EventProvider()),
-        ChangeNotifierProvider(create: (context) => PublicEventProvider()),
         ChangeNotifierProvider(create: (context) => PasswordResetProvider()),
         ChangeNotifierProvider(create: (context) => EdcTeamProvider()),
         ChangeNotifierProvider(create: (context) => PublicProfileProvider()),
@@ -38,36 +39,49 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          // backgroundColor: Colors.blue,
           selectedItemColor: Colors.pink,
           unselectedItemColor: Colors.grey,
         ),
         useMaterial3: true,
       ),
-      // Use a Consumer widget to rebuild the UI based on authentication state
-      home: Consumer<AuthProvider>(
-        builder: (context, authProvider, _) {
-          // If data is still loading, show a loading screen
-          if (authProvider.isLoading) {
-            // return const SplashScreen();
-          }
-
-          // Check if the user is logged in
-          if (authProvider.isAuthenticated) {
-            // If the user is authenticated, check their role
-            if (authProvider.userRole == 'admin') {
-              // Navigate to Admin Dashboard if the user is an admin
-              return const AdminDashboard();
-            } else {
-              // Navigate to Bottom Navigation Page if the user is a regular user
-              return const BottomPageNavigation();
-            }
+      home: FutureBuilder<void>(
+        future: _initializeApp(
+            context), // Initialize the app before deciding the next screen
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While waiting for initialization, show the splash screen
+            return const SplashScreen();
+          } else if (snapshot.hasError) {
+            // Handle error if needed
+            return const SignInPage(); // Show sign-in on error
           } else {
-            // If not authenticated, show the sign-in page
-            return const SignInPage();
+            // After initialization, navigate based on authentication state
+            return Consumer<AuthProvider>(
+              builder: (context, authProvider, _) {
+                if (authProvider.isLoading) {
+                  // Show loading screen while authenticating
+                  return const SplashScreen();
+                }
+
+                if (authProvider.isAuthenticated) {
+                  if (authProvider.userRole == 'admin') {
+                    return const AdminDashboard(); // Show Admin Dashboard
+                  } else {
+                    return const BottomPageNavigation(); // Show bottom navigation for normal users
+                  }
+                } else {
+                  return const SignInPage(); // Show sign-in page if not authenticated
+                }
+              },
+            );
           }
         },
       ),
     );
+  }
+
+  Future<void> _initializeApp(BuildContext context) async {
+    // Simulate a delay for splash screen effect
+    await Future.delayed(const Duration(seconds: 2));
   }
 }

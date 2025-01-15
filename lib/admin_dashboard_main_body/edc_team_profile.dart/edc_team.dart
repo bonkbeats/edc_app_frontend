@@ -284,7 +284,28 @@ class _EdcteamState extends State<Edcteam> {
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
+                              showDialog(
+                                context: context,
+                                barrierDismissible:
+                                    false, // Prevents dismissing the dialog by tapping outside
+                                builder: (BuildContext context) {
+                                  return const Dialog(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          CircularProgressIndicator(),
+                                          SizedBox(width: 16),
+                                          Text('Creating profile...'),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
                               await _createProfile();
+                              Navigator.of(context).pop();
                               Navigator.of(context).pop();
                             },
                             child: const Text('Create Profile'),

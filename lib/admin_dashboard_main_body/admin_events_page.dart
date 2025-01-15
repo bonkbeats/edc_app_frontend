@@ -32,7 +32,8 @@ class _AdminEventPageState extends State<AdminEventPage> {
   // final _editeventDayController = TextEditingController();
   // final _editeventDateController = TextEditingController();
 
-  File? _imageFileCreate; // For the "Create Event" form
+  File? _imageFileCreate;
+  bool _isLoading = false; // For the "Create Event" form
   // File? _imageFileEdit; // For the "Edit Event" form
 
   @override
@@ -63,6 +64,10 @@ class _AdminEventPageState extends State<AdminEventPage> {
 
   Future<void> _createEvent() async {
     if (_createFormKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true; // Show the loading spinner
+      });
+
       String eventName = _createEventNameController.text;
       String location = _createLocationController.text;
       String organiser = _creatOrganiserController.text;
@@ -103,6 +108,10 @@ class _AdminEventPageState extends State<AdminEventPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e')),
         );
+      } finally {
+        setState(() {
+          _isLoading = false; // Hide the loading spinner
+        });
       }
     }
   }
@@ -414,10 +423,14 @@ class _AdminEventPageState extends State<AdminEventPage> {
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                   ),
-                  child: const Text(
-                    'Create Event',
-                    style: TextStyle(fontSize: 16),
-                  ),
+                  child: _isLoading
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : const Text(
+                          'Create Event',
+                          style: TextStyle(fontSize: 16),
+                        ),
                 ),
               ),
             ],
