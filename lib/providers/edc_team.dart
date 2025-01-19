@@ -30,7 +30,7 @@ class EdcTeamProvider extends ChangeNotifier {
 
       // Prepare URI
       final uri = Uri.parse(
-          'http://192.168.43.189:4000/api/v1/user/admindashboard/profile/$profileId'); // Replace with your backend URL
+          'http://157.245.107.86:4000/api/v1/user/admindashboard/profile/$profileId'); // Replace with your backend URL
 
       // Create multipart request
       var request = http.MultipartRequest('PATCH', uri)
@@ -90,7 +90,7 @@ class EdcTeamProvider extends ChangeNotifier {
 
       // Prepare URI for the profile creation endpoint
       final uri = Uri.parse(
-          'http://192.168.43.189:4000/api/v1/user/admindashboard/profile'); // Replace with your backend URL
+          'http://157.245.107.86:4000/api/v1/user/admindashboard/profile'); // Replace with your backend URL
 
       // Create multipart request
       var request = http.MultipartRequest('POST', uri)
@@ -144,7 +144,7 @@ class EdcTeamProvider extends ChangeNotifier {
       // Make the GET request
       final response = await http.get(
         Uri.parse(
-            'http://192.168.43.189:4000/api/v1/user/admindashboard/profile'), // Replace with your backend URL
+            'http://157.245.107.86:4000/api/v1/user/admindashboard/profile'), // Replace with your backend URL
         headers: {
           'Authorization': 'Bearer $token', // Include the token in the header
           'Content-Type': 'application/json', // Ensure JSON response
@@ -180,7 +180,7 @@ class EdcTeamProvider extends ChangeNotifier {
 
       final response = await http.delete(
         Uri.parse(
-            'http://192.168.43.189:4000/api/v1/user/admindashboard/profile/$profileId'), // Replace with your backend URL
+            'http://157.245.107.86:4000/api/v1/user/admindashboard/profile/$profileId'), // Replace with your backend URL
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

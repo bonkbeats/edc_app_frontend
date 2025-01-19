@@ -16,7 +16,7 @@ class PublicEventProvider extends ChangeNotifier {
   // Fetch all events from the server
   Future<void> fetchAllEvents() async {
     const url =
-        'https://edc-app-osf6.onrender.com/api/v1/publicevent'; // Replace with your backend URL
+        'http://157.245.107.86:4000/api/v1/publicevent'; // Replace with your backend URL
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -47,7 +47,7 @@ class PublicEventProvider extends ChangeNotifier {
     }
 
     final url =
-        'https://edc-app-osf6.onrender.com/api/v1/publicevent/search?name=$query';
+        'http://157.245.107.86:4000/api/v1/publicevent/search?name=$query';
 
     try {
       final response = await http.get(Uri.parse(url));

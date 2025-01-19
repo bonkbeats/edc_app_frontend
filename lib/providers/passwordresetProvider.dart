@@ -18,7 +18,7 @@ class PasswordResetProvider extends ChangeNotifier {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://edc-app-osf6.onrender.com/api/v1/auth/forgotpassword'), // Your backend URL
+            'http://157.245.107.86:4000/api/v1/auth/forgotpassword'), // Your backend URL
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'email': email}),
       );
@@ -46,7 +46,7 @@ class PasswordResetProvider extends ChangeNotifier {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://edc-app-osf6.onrender.com/api/v1/auth/resetpassword/$token'), // Your backend URL
+            'http://157.245.107.86:4000/api/v1/auth/resetpassword/$token'), // Your backend URL
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'password': newPassword}),
       );

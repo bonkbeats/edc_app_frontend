@@ -15,21 +15,18 @@ class PublicProfileProvider extends ChangeNotifier {
 
   // Corrected typo in method name to 'fetchAllProfiles'
   Future<void> fetchAllProfiles() async {
-    const url = 'https://edc-app-osf6.onrender.com/api/v1/publicevent/profile';
+    const url = 'http://157.245.107.86:4000/api/v1/publicevent/PROFILE';
 
     try {
       final response = await http.get(Uri.parse(url));
 
-      // Debugging: print the raw response body
       debugPrint('Raw response: ${response.body}');
 
       if (response.statusCode == 200) {
         final decodeData = json.decode(response.body);
 
-        // Debugging: print the decoded data
         debugPrint('Decoded data: $decodeData');
 
-        // Ensure that decodeData['profiles'] is a list
         if (decodeData['profiles'] is List) {
           _profiles = List<Map<String, dynamic>>.from(decodeData['profiles']);
         } else {
@@ -58,7 +55,7 @@ class PublicProfileProvider extends ChangeNotifier {
     }
 
     final url =
-        'https://edc-app-osf6.onrender.com/api/v1/publicevent/profile/search?name=${Uri.encodeQueryComponent(query)}';
+        'http://157.245.107.86:4000/api/v1/publicevent/profile/search?name=${Uri.encodeQueryComponent(query)}';
     debugPrint('Search URL: $url'); // Check the URL being used
 
     try {
