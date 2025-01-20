@@ -5,6 +5,7 @@ import 'package:edc_app/providers/event_provider.dart'; // Import EventProvider
 import 'package:edc_app/providers/passwordresetProvider.dart';
 import 'package:edc_app/providers/public_event_provider.dart';
 import 'package:edc_app/providers/public_profile.dart';
+import 'package:edc_app/providers/teams_provider.dart';
 import 'package:edc_app/screens.dart/authentication_page.dart/sign_in_page.dart';
 import 'package:edc_app/screens.dart/authentication_page.dart/splash_screen.dart';
 // import 'package:edc_app/screens.dart/authentication_page.dart/splash_screen.dart';
@@ -23,6 +24,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => PasswordResetProvider()),
         ChangeNotifierProvider(create: (context) => EdcTeamProvider()),
         ChangeNotifierProvider(create: (context) => PublicProfileProvider()),
+        ChangeNotifierProvider(create: (context) => TeamProvider()),
       ],
       child: const MyApp(),
     ),

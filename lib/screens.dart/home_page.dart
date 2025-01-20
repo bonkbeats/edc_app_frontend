@@ -232,25 +232,33 @@ class EventCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         child: Image.network(
                           imageUrl, // Use Image.network to load image from server
-                          height: 150.0,
-                          fit: BoxFit.cover,
+
+                          width: double
+                              .infinity, // Take full width of the container
+                          height: 100.0, // Match the container height
+                          fit: BoxFit
+                              .cover, // Ensures the image covers the container's space
+
                           errorBuilder: (context, error, stackTrace) {
                             // Show placeholder if image loading fails
-                            return const Center(
-                              child: Text(
-                                'No Image Available',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.grey),
+                            return Center(
+                              child: Container(
+                                height: 100.0,
+                                decoration: BoxDecoration(
+                                  color:
+                                      Colors.grey[200], // Light grey background
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
                               ),
                             );
                           },
                         ),
                       )
-                    : const Center(
-                        child: Text(
-                          'No Image Available',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey),
+                    : Container(
+                        height: 100.0,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200], // Light grey background
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                 const SizedBox(height: 8.0),
