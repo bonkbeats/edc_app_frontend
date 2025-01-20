@@ -1,3 +1,4 @@
+import 'package:edc_app/screens.dart/registration_form.dart';
 import 'package:flutter/material.dart';
 
 class EventDetailPage extends StatefulWidget {
@@ -188,6 +189,13 @@ class _EventDetailPageState extends State<EventDetailPage> {
             child: Center(
               child: ElevatedButton(
                 onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreateTeamForm(
+                              eventName: widget.eventName,
+                            )),
+                  );
                   // Add navigation or registration logic here
                 },
                 style: ElevatedButton.styleFrom(
