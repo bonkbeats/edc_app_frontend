@@ -69,6 +69,7 @@ class _CreateTeamFormState extends State<CreateTeamForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Team created successfully!')),
       );
+      Navigator.of(context).pop();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to create team: $e')),

@@ -27,8 +27,7 @@ class TeamProvider extends ChangeNotifier {
       }
 
       // Prepare URI for the team creation endpoint
-      final uri =
-          Uri.parse('http://192.168.179.85:4000/api/v1/user/userdashboard');
+      final uri = Uri.parse('http://localhost:4000/api/v1/user/userdashboard');
 
       // Create the POST request
       final response = await http.post(
@@ -69,7 +68,7 @@ class TeamProvider extends ChangeNotifier {
       }
 
       final uri = Uri.parse(
-          'http://192.168.179.85:4000/api/v1/user/userdashboard'); // Update the URI to your endpoint
+          'http://localhost:4000/api/v1/user/userdashboard'); // Update the URI to your endpoint
 
       final response = await http.get(
         uri,
